@@ -1,66 +1,146 @@
-/*
-	Theory by TEMPLATED
-	templated.co @templatedco
-	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
-*/
-
 (function($) {
+  
+  "use strict";  
 
-	// Breakpoints.
-		skel.breakpoints({
-			xlarge:	'(max-width: 1680px)',
-			large:	'(max-width: 1280px)',
-			medium:	'(max-width: 980px)',
-			small:	'(max-width: 736px)',
-			xsmall:	'(max-width: 480px)'
-		});
+  $(window).on('load', function() {
 
-	$(function() {
+  /* 
+   MixitUp
+   ========================================================================== */
+  $('#portfolio').mixItUp();
 
-		var	$window = $(window),
-			$body = $('body');
+  /*Page Loader active
+  ========================================================*/
+  $('#preloader').fadeOut();
 
-		// Disable animations/transitions until the page has loaded.
-			$body.addClass('is-loading');
+  // Sticky Nav
+    $(window).on('scroll', function() {
+        if ($(window).scrollTop() > 100) {
+            $('.scrolling-navbar').addClass('top-nav-collapse');
+        } else {
+            $('.scrolling-navbar').removeClass('top-nav-collapse');
+        }
+    });
 
-			$window.on('load', function() {
-				window.setTimeout(function() {
-					$body.removeClass('is-loading');
-				}, 100);
-			});
+    /* Auto Close Responsive Navbar on Click
+    ========================================================*/
+    function close_toggle() {
+        if ($(window).width() <= 768) {
+            $('.navbar-collapse a').on('click', function () {
+                $('.navbar-collapse').collapse('hide');
+            });
+        }
+        else {
+            $('.navbar .navbar-inverse a').off('click');
+        }
+    }
+    close_toggle();
+    $(window).resize(close_toggle);
 
-		// Prioritize "important" elements on medium.
-			skel.on('+medium -medium', function() {
-				$.prioritize(
-					'.important\\28 medium\\29',
-					skel.breakpoint('medium').active
-				);
-			});
+    // one page navigation 
+    $('.navbar-nav').onePageNav({
+      currentClass: 'active'
+    });
 
-	// Off-Canvas Navigation.
+    /* slicknav mobile menu active  */
+    $('.mobile-menu').slicknav({
+        prependTo: '.navbar-header',
+        parentTag: 'liner',
+        allowParentLinks: true,
+        duplicate: true,
+        label: '',
+        closedSymbol: '<i class="lni-chevron-right"></i>',
+        openedSymbol: '<i class="lni-chevron-down"></i>',
+      });
 
-		// Navigation Panel.
-			$(
-				'<div id="navPanel">' +
-					$('#nav').html() +
-					'<a href="#navPanel" class="close"></a>' +
-				'</div>'
-			)
-				.appendTo($body)
-				.panel({
-					delay: 500,
-					hideOnClick: true,
-					hideOnSwipe: true,
-					resetScroll: true,
-					resetForms: true,
-					side: 'left'
-				});
+      /* WOW Scroll Spy
+    ========================================================*/
+     var wow = new WOW({
+      //disabled for mobile
+        mobile: false
+    });
 
-		// Fix: Remove transitions on WP<10 (poor/buggy performance).
-			if (skel.vars.os == 'wp' && skel.vars.osVersion < 10)
-				$('#navPanel')
-					.css('transition', 'none');
+    wow.init();
 
-	});
+    /* 
+    CounterUp
+    ========================================================================== */
+    $('.counter').counterUp({
+      time: 1000
+    });  
+    
+    /* Testimonials Carousel 
+    ========================================================*/
+    var owl = $("#testimonials");
+      owl.owlCarousel({
+        loop: true,
+        nav: false,
+        dots: true,
+        center: true,
+        margin: 15,
+        slideSpeed: 1000,
+        stopOnHover: true,
+        autoPlay: true,
+        responsiveClass: true,
+        responsiveRefreshRate: true,
+        responsive : {
+            0 : {
+                items: 1
+            },
+            768 : {
+                items: 1
+            },
+            960 : {
+                items: 1
+            },
+            1200 : {
+                items: 1
+            },
+            1920 : {
+                items: 1
+            }
+        }
+      });  
 
-})(jQuery);
+    /* 
+   VIDEO POP-UP
+   ========================================================================== */
+    $('.video-popup').magnificPopup({
+      disableOn: 700,
+      type: 'iframe',
+      mainClass: 'mfp-fade',
+      removalDelay: 160,
+      preloader: false,
+      fixedContentPos: false,
+    });
+    
+    /* Nivo Lightbox
+    ========================================================*/   
+     $('.lightbox').nivoLightbox({
+      effect: 'fadeScale',
+      keyboardNav: true,
+    });
+
+    /* Back Top Link active
+    ========================================================*/
+      var offset = 200;
+      var duration = 500;
+      $(window).scroll(function() {
+        if ($(this).scrollTop() > offset) {
+          $('.back-to-top').fadeIn(400);
+        } else {
+          $('.back-to-top').fadeOut(400);
+        }
+      });
+
+      $('.back-to-top').on('click',function(event) {
+        event.preventDefault();
+        $('html, body').animate({
+          scrollTop: 0
+        }, 600);
+        return false;
+      });
+
+  });      
+
+}(jQuery));
